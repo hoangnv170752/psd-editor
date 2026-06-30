@@ -14,6 +14,7 @@ import {
   IconButton,
   StackDivider,
   Text,
+  Textarea,
   Tooltip,
   VStack,
 } from "@chakra-ui/react";
@@ -61,6 +62,18 @@ const TextProperty = ({ canvas }: { canvas: Canvas }) => {
           <Text fontWeight={700} fontSize="sm" mb="1">
             Text Properties
           </Text>
+          <Grid templateColumns="100px 1fr" mt="3" alignItems="start">
+            <Text fontSize="xs" fontWeight={500}>
+              Text
+            </Text>
+            <Textarea
+              size="sm"
+              value={selected.text}
+              onChange={(e) => canvas.onChangeTextProperty("text", e.target.value)}
+              resize="vertical"
+              rows={3}
+            />
+          </Grid>
           <Grid templateColumns="100px 1fr" mt="3" alignItems="center">
             <Text fontSize="xs" fontWeight={500}>
               Font Family
