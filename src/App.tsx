@@ -1,5 +1,6 @@
 import "@/config/fabric";
 import { ChakraProvider } from "@chakra-ui/react";
+import { theme } from "@/config/theme";
 import { Home } from "@/pages/Home";
 import { Canvas, CanvasProvider } from "./store/canvas";
 import { TemplateProvider, TemplateStore } from "./store/template";
@@ -9,7 +10,7 @@ const template = new TemplateStore(canvas);
 
 function App() {
   return (
-    <ChakraProvider>
+    <ChakraProvider theme={theme}>
       <CanvasProvider value={canvas}>
         <TemplateProvider value={template}>
           <Home />

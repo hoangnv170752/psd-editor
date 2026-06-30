@@ -1,4 +1,4 @@
-# PSD Editor
+# PSDSuper
 
 PSD Editor is a web application that allows users to upload PSD templates, manipulate text and image properties, and make creative changes on a canvas.
 

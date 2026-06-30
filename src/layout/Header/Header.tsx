@@ -1,7 +1,7 @@
 import { Box, Button, ButtonGroup, HStack, Icon, StackDivider, Text, VStack } from "@chakra-ui/react";
 import { ActionButton, HeadBar, HeaderLogo } from "../container";
 import zocketLogo from "@/assets/logo.jpeg";
-import { TypeIcon, ImageIcon, TrashIcon, UndoIcon, RedoIcon } from "lucide-react";
+import { TypeIcon, ImageIcon, TrashIcon, UndoIcon, RedoIcon, DownloadIcon } from "lucide-react";
 import { BringToFrontIcon, SendToBackIcon } from "@/components/Icons";
 import { useCanvas } from "@/store/canvas";
 import { sampleImageURL } from "@/constants/ads";
@@ -37,11 +37,11 @@ export default function Header() {
     <HeadBar>
       <HStack>
         <HeaderLogo borderRadius="full" src={zocketLogo} alt="logo" />
-        <Text fontSize="lg" fontWeight={600} width={"full"}>
-          PSD Editor
+        <Text fontSize={["md", "lg"]} fontWeight={600} width={"full"}>
+          PSDSuper
         </Text>
       </HStack>
-      <HStack spacing="2.5" divider={<StackDivider borderColor="gray.200" />}>
+      <HStack spacing={[1, 2.5]} divider={<StackDivider borderColor="gray.200" />} overflowX="auto" flexShrink={0}>
         <ButtonGroup spacing="0.5">
           <ActionButton variant="ghost" onClick={() => canvas.onAddText("Sample Text", { fill: "#000000" })}>
             <Icon as={TypeIcon} fontSize={20} />
@@ -91,11 +91,14 @@ export default function Header() {
           </ActionButton>
         </ButtonGroup>
       </HStack>
-      <HStack>
+      <HStack flexShrink={0}>
         <VStack>
           <Box width="full">
-            <Button size="sm" fontSize="xs" width="full" onClick={onOpenFileExplorer}>
-              Import PSD Template
+            <Button size="sm" fontSize={["10px", "xs"]} width="full" leftIcon={<Icon as={DownloadIcon} fontSize={14} />} onClick={canvas.onExportCanvas.bind(canvas)}>
+              Export
+            </Button>
+            <Button size="sm" fontSize={["10px", "xs"]} width="full" mt="2" onClick={onOpenFileExplorer}>
+              Import PSD
             </Button>
             <input
               ref={explorer}

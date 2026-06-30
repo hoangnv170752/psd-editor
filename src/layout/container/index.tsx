@@ -16,13 +16,17 @@ export const MainWrapperContainer = styled(Box)`
   flex: 1;
   display: flex;
   overflow: auto;
-  flex-direction: row;
+  flex-direction: column;
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+  }
 `;
 
 export const MainContainer = chakra(Box, {
   baseStyle: {
-    p: 5,
-    maxHeight: "calc(100vh - 60px)", // 60px is the height of the header
+    p: [2, 4, 5],
+    maxHeight: ["calc(100vh - 60px - 240px)", "calc(100vh - 60px - 240px)", "calc(100vh - 60px)"], // 60px is the height of the header, 240px reserved for mobile sidebars
     flex: 1,
     overflow: "auto",
     display: "grid",
@@ -51,14 +55,16 @@ export const Loader = chakra(({ isLoading }: { isLoading: boolean }) => {
 
 export const HeadBar = chakra(Box, {
   baseStyle: {
-    px: 4,
+    px: [2, 4],
     py: 1,
-    height: "60px",
+    minHeight: "60px",
     backgroundColor: "#ffffff",
     borderBottom: "1.5px solid #e2e8f0",
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between",
+    gap: 2,
+    flexWrap: ["wrap", "nowrap"],
   },
 });
 
@@ -75,8 +81,10 @@ export const Drawer = chakra("aside", {
     flexShrink: 0,
     flexDirection: "column",
     backgroundColor: "white",
-    borderRight: "1.5px solid #e2e8f0",
-    width: 320,
+    borderRight: ["none", "1.5px solid #e2e8f0"],
+    borderBottom: ["1.5px solid #e2e8f0", "none"],
+    width: ["100%", "260px", "320px"],
+    height: ["240px", "auto"],
     overflow: "auto",
   },
 });

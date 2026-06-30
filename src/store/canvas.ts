@@ -464,6 +464,18 @@ export class Canvas {
     this.instance.fire("object:modified", { target: null }).renderAll();
   }
 
+  onExportCanvas() {
+    if (!this.instance) return;
+
+    const dataURL = this.instance.toDataURL({ format: "png", multiplier: 1 });
+    const link = document.createElement("a");
+    link.download = "psdsuper-export.png";
+    link.href = dataURL;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
   *onUndo() {
     if (!this.instance || !this.canUndo) return;
 
@@ -536,6 +548,25 @@ export function useCanvas(props?: { onInitialize?: (canvas: Canvas) => void }) {
     [canvas]
   );
 
+  const keyDownListener = useCallback(
+    (event: KeyboardEvent) => {
+      if (!canvas.instance) return;
+
+      // Ignore if user is typing in an input field
+      const target = event.target as HTMLElement;
+      if (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable) return;
+
+      if (event.key === "Delete" || event.key === "Backspace") {
+        const activeObject = canvas.instance.getActiveObject();
+        if (activeObject) {
+          event.preventDefault();
+          canvas.onDeleteObject();
+        }
+      }
+    },
+    [canvas]
+  );
+
   useEffect(() => {
     if (!canvas.instance) return;
 
@@ -548,11 +579,13 @@ export function useCanvas(props?: { onInitialize?: (canvas: Canvas) => void }) {
     canvas.instance.on("selection:cleared", canvas.onDeselect.bind(canvas));
 
     window.addEventListener("mousedown", clickAwayListener);
+    window.addEventListener("keydown", keyDownListener);
 
     return () => {
       window.removeEventListener("mousedown", clickAwayListener);
+      window.removeEventListener("keydown", keyDownListener);
     };
-  }, [canvas.instance, clickAwayListener]);
+  }, [canvas.instance, clickAwayListener, keyDownListener]);
 
   return [canvas, ref] as const;
 }

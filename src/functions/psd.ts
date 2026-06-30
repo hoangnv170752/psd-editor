@@ -1,3 +1,4 @@
+/* eslint-disable no-control-regex */
 import { ObjectType } from "@/interface/canvas";
 import { Template, TemplateState } from "@/interface/template";
 import { Layer, Psd, RGBA, readPsd } from "ag-psd";
@@ -43,14 +44,18 @@ export async function convertTemplateToState(layers: Layer[]) {
     const blob = layer.canvas ? await convertCanvasToBlob(layer.canvas) : null;
     const file = blob ? new File([blob], name, { type: blob.type }) : null;
 
+    const hasRaster = layer.canvas && layer.canvas.width > 0 && layer.canvas.height > 0;
+    const isShortText = type === "textbox" && name.length <= 5 && /^[A-Za-z0-9][A-Za-z0-9._]{0,4}$/.test(name);
+    const finalType: ObjectType = isShortText && hasRaster ? "image" : type;
+
     let value = "";
-    if (type === "image") {
+    if (finalType === "image") {
       if (file) {
         value = URL.createObjectURL(file);
       }
     } else {
       if (layer.text) {
-        value = layer.text.text.replace(/\x03/g, " ");
+        value = layer.text.text.replace(/\x03/g, " ").toUpperCase();
       }
     }
 
@@ -60,22 +65,24 @@ export async function convertTemplateToState(layers: Layer[]) {
     const width = Math.ceil((layer.right || 0) - (layer.left || 0));
     const height = Math.ceil((layer.bottom || 0) - (layer.top || 0));
 
-    const fontSize = Math.ceil(layer.text?.style?.fontSize || defaultFontSize);
+    const rawFontSize = layer.text?.style?.fontSize;
+    const fontSizeMultiplier = 3.534;
+    const fontSize = Math.ceil((rawFontSize || defaultFontSize) * fontSizeMultiplier);
     const fontFamily = layer.text?.style?.font?.name?.replace(/-/g, " ") || defaultFont;
 
     const details = {
       top: layer.top,
       left: layer.left,
       opacity: layer.opacity,
-      fill: type === "textbox" ? hex : undefined,
-      width: type === "textbox" ? width + 12 : width,
-      height: type !== "textbox" ? height : undefined,
-      fontSize: type === "textbox" ? fontSize : undefined,
-      fontFamily: type === "textbox" ? fontFamily || defaultFont : undefined,
+      fill: finalType === "textbox" ? hex : undefined,
+      width: finalType === "textbox" ? width + 12 : width,
+      height: finalType !== "textbox" ? height : undefined,
+      fontSize: finalType === "textbox" ? fontSize : undefined,
+      fontFamily: finalType === "textbox" ? fontFamily || defaultFont : undefined,
     };
 
     const newDetails = _(details).omitBy(_.isUndefined).value();
-    const data = { type, name, value, details: newDetails };
+    const data = { type: finalType, name, value, details: newDetails };
 
     state.push(data);
   }

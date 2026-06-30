@@ -4,8 +4,10 @@ import { fabric as fabricJS } from "fabric";
 import { useRef, useState } from "react";
 import { flowResult } from "mobx";
 import PropertyInput from "@/components/Input/PropertyInput";
-import { VStack, StackDivider, HStack, ButtonGroup, Button, Input, Text, Box, Grid, Image } from "@chakra-ui/react";
+import { generateRandomImageSource } from "@/functions/image";
+import { VStack, StackDivider, HStack, ButtonGroup, Button, Input, Text, Box, Grid, Image, Icon } from "@chakra-ui/react";
 import { Drawer, TransparentBackground } from "@/layout/container";
+import { SparklesIcon } from "lucide-react";
 
 const ImageProperty = ({ canvas }: { canvas: Canvas }) => {
   const selected = canvas.selected as Required<fabricJS.Image> & { src: string };
@@ -60,6 +62,11 @@ const ImageProperty = ({ canvas }: { canvas: Canvas }) => {
     const file = event.target.files.item(0)!;
     const url = URL.createObjectURL(file);
     await flowResult(canvas.onChangeImageSource(url));
+  };
+
+  const onGenerateImage = async () => {
+    const source = generateRandomImageSource(scaled.width, scaled.height);
+    await flowResult(canvas.onChangeImageSource(source));
   };
 
   return (
@@ -118,6 +125,9 @@ const ImageProperty = ({ canvas }: { canvas: Canvas }) => {
           <ButtonGroup mt="4" isAttached variant="outline" size="sm" width="full">
             <Button fontSize="xs" flex={1} onClick={onOpenImageExplorer}>
               Change Image
+            </Button>
+            <Button fontSize="xs" flex={1} leftIcon={<Icon as={SparklesIcon} fontSize={14} />} onClick={onGenerateImage}>
+              Generate
             </Button>
           </ButtonGroup>
           <Input
