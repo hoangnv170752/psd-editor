@@ -1,0 +1,45 @@
+================================================================================
+                         HƯỚNG DẪN CHẠY DỰ ÁN PSDSUPER
+================================================================================
+
+YÊU CẦU HỆ THỐNG:
+- Node.js phiên bản 18 trở lên
+- pnpm (cài đặt: npm install -g pnpm)
+
+--------------------------------------------------------------------------------
+CÁC BƯỚC CÀI ĐẶT VÀ CHẠY:
+--------------------------------------------------------------------------------
+
+1. MỞ TERMINAL/CMD TẠI THƯ MỤC DỰ ÁN
+
+2. CÀI ĐẶT CÁC DEPENDENCIES:
+   pnpm install
+
+3. CHẠY CHẾ ĐỘ DEVELOPMENT:
+   pnpm dev
+
+   => Truy cập: http://localhost:5173
+
+4. BUILD PRODUCTION:
+   pnpm build
+
+5. XEM TRƯỚC PRODUCTION BUILD:
+   pnpm preview
+
+--------------------------------------------------------------------------------
+CÁC LỆNH CƠ BẢN:
+--------------------------------------------------------------------------------
+
+pnpm dev      - Chạy development server (hot reload)
+pnpm build    - Build dự án cho production
+pnpm preview  - Xem trước bản build production
+pnpm lint     - Kiểm tra lỗi code với ESLint
+
+--------------------------------------------------------------------------------
+LƯU Ý:
+--------------------------------------------------------------------------------
+
+- Đảm bảo đã cài đặt Node.js trước khi chạy các lệnh trên
+- Nếu gặp lỗi, thử xoá thư mục node_modules và chạy lại "pnpm install"
+
+================================================================================
